@@ -1,8 +1,17 @@
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
-import java.util.zip.*;
+import java.util.zip.InflaterInputStream;
+import java.util.zip.InflaterOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 public class Flubot {
     private static final Flubot INSTANCE = new Flubot();
