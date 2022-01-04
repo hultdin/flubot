@@ -140,7 +140,7 @@ public class Flubot {
         return asset;
     }
 
-    public static void decrypt(String apk, String asset, String password, String output){
+    public static void decryptAsset(String apk, String asset, String password, String output){
         try {
             ZipFile zip = new ZipFile(apk);
             InputStream is = zip.getInputStream(new ZipEntry(asset));
