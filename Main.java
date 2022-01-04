@@ -8,6 +8,6 @@ public class Main {
             System.out.println(domain);
         }
         
-        Flubot.getInstance().decrypt("~/malware/repository/flubot/DHL14.apk", "assets/gjgIfyy/qdf7ywyt8" + 1 + ".Fej", key, "~/malware/repository/flubot/output.zip");
+        Flubot.getInstance().decryptAsset("~/malware/repository/flubot/DHL14.apk", "assets/gjgIfyy/qdf7ywyt8" + 1 + ".Fej", key, "~/malware/repository/flubot/output.zip");
     }
 }
