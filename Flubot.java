@@ -1,3 +1,5 @@
+package main;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.Random;
 import java.util.zip.InflaterInputStream;
 import java.util.zip.InflaterOutputStream;
@@ -69,6 +72,18 @@ public class Flubot {
         return new String(chars);
     }
 
+    public static String decode(String string) {
+        try {
+            StringBuilder buffer = new StringBuilder();
+            for (int i = 0; i < string.length(); ++i) {
+                buffer.append((char) (string.charAt(i) ^ (char) 24627));
+            }
+            return buffer.toString();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
     private static void decrypt(InputStream is, String password, OutputStream os) throws IOException {
         char[] characters = password.toCharArray();
         int[] key = {characters[0] | (characters[1] << 16), (characters[3] << 16) | characters[2], (characters[5] << 16) | characters[4], (characters[7] << 16) | characters[6]};
@@ -96,6 +111,33 @@ public class Flubot {
                 return;
             }
         }
+    }
+
+    public static String findAsset(String apk){
+        String asset = null;
+        try {
+            ZipFile zip = new ZipFile(apk);
+            if(zip != null) {
+                for (Enumeration<? extends ZipEntry> enumeration = zip.entries(); asset == null && enumeration.hasMoreElements(); ) {
+                    ZipEntry entry = enumeration.nextElement();
+                    InputStream is = zip.getInputStream(entry);
+                    byte[] magic = new byte[2];
+                    is.read(magic);
+
+                    // convert magic to zlib cmf and flg bytes
+                    byte cmf = magic[0];
+                    byte flg = magic[1];
+
+                    if ((cmf == (byte) 0x78) && ((flg == (byte) 0x01) || (flg == (byte) 0x9C) || (flg == (byte) 0xDA))) {
+                        asset = entry.getName();
+                    }
+                    is.close();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return asset;
     }
 
     public static void decrypt(String apk, String asset, String password, String output){
